@@ -1,4 +1,5 @@
-**simulation of full_adder_Tb:**
+**simulation of tb_bcd_adder.v:**
  
- <img width="1571" height="822" alt="WhatsApp Image 2026-06-11 at 5 51 33 PM" src="https://github.com/user-attachments/assets/2db388e8-5757-411f-b401-be51214b0faf" />
+ 
+<img width="1316" height="646" alt="image" src="https://github.com/user-attachments/assets/0a6026d9-6781-4f5a-bba5-281358fd9be9" />
 
