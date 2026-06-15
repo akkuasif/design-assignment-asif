@@ -1,0 +1,86 @@
+`timescale 1ns / 1ps
+
+// 1. Transaction Class for FIFO
+class fifo_transaction;
+    // Randomizable inputs (Stimulus)
+    rand bit wr_en;
+    rand bit rd_en;
+    rand bit [7:0] data_in;
+
+    // Outputs (Responses)
+    bit [7:0] data_out;
+    bit full;
+    bit empty;
+
+    // Constraint: Prevent simultaneous read and write for this basic test
+    constraint c1 { wr_en != rd_en; }
+
+    // Display function
+    function void display(string name);
+        $display("[%s] wr_en=%0b rd_en=%0b data_in=%0h | data_out=%0h full=%0b empty=%0b", 
+                 name, wr_en, rd_en, data_in, data_out, full, empty);
+    endfunction
+endclass
+
+// 2. Testbench Module
+module tb_fifo;
+    // Signals
+    logic clk;
+    logic rst_n;
+    logic wr_en;
+    logic rd_en;
+    logic [7:0] data_in;
+    logic [7:0] data_out;
+    logic full;
+    logic empty;
+
+    // Instantiate the Design Under Test (DUT)
+    fifo dut (
+        .clk(clk), .rst_n(rst_n), .wr_en(wr_en), .rd_en(rd_en),
+        .data_in(data_in), .data_out(data_out), .full(full), .empty(empty)
+    );
+
+    // Clock generation (10ns period)
+    always #5 clk = ~clk;
+
+    initial begin
+        // Create transaction object
+        fifo_transaction tr;
+        tr = new();
+
+        // Initialize signals
+        clk = 0;
+        rst_n = 0;
+        wr_en = 0;
+        rd_en = 0;
+        data_in = 0;
+
+        #10 rst_n = 1; // Release reset
+
+        $display("--- Starting FIFO Test ---");
+
+        // Generate 10 random transactions
+        for (int i=0; i<10; i++) begin
+            if (!tr.randomize()) $display("Randomization failed!");
+
+            // Drive randomized data from transaction class to DUT
+            wr_en = tr.wr_en;
+            rd_en = tr.rd_en;
+            data_in = tr.data_in;
+
+            @(posedge clk); 
+            #1; // Small delay to let outputs settle
+
+            // Capture outputs from DUT back into transaction class
+            tr.data_out = data_out;
+            tr.full = full;
+            tr.empty = empty;
+
+            // Display values
+            tr.display($sformatf("Trans %0d", i+1));
+        end
+
+        #20 $display("--- End of Test ---");
+        $finish;
+    end
+endmodule
