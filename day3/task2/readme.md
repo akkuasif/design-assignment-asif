@@ -1,6 +1,6 @@
 
-           <img width="1600" height="905" alt="image" src="https://github.com/user-attachments/assets/c20a156b-b6fa-4a60-af55-99fb64ffb413" />
-                                                                          Overview This project implements a robust, structural data pipeline in Verilog. It is designed to safely transfer data from a high-speed input source to a slower processing unit. By utilizing a First-In-First-Out (FIFO) buffer in the center of the architecture, the system successfully manages timing differences, absorbs high-speed data bursts, and prevents dropped bytes.
+ <img width="1600" height="905" alt="image" src="https://github.com/user-attachments/assets/bcbdfa09-e288-4ec5-8748-89cc0ff61557" />
+          Overview This project implements a robust, structural data pipeline in Verilog. It is designed to safely transfer data from a high-speed input source to a slower processing unit. By utilizing a First-In-First-Out (FIFO) buffer in the center of the architecture, the system successfully manages timing differences, absorbs high-speed data bursts, and prevents dropped bytes.
 
 System Architecture The design is highly modular, broken down into three primary functional stages and one structural wrapper:
 
