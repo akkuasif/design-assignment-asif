@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-// 1. Transaction Class for FIFO
+
 class fifo_transaction;
     // Randomizable inputs (Stimulus)
     rand bit wr_en;
@@ -22,7 +22,7 @@ class fifo_transaction;
     endfunction
 endclass
 
-// 2. Testbench Module
+
 module tb_fifo;
     // Signals
     logic clk;
@@ -34,17 +34,17 @@ module tb_fifo;
     logic full;
     logic empty;
 
-    // Instantiate the Design Under Test (DUT)
+    
     fifo dut (
         .clk(clk), .rst_n(rst_n), .wr_en(wr_en), .rd_en(rd_en),
         .data_in(data_in), .data_out(data_out), .full(full), .empty(empty)
     );
 
-    // Clock generation (10ns period)
+    
     always #5 clk = ~clk;
 
     initial begin
-        // Create transaction object
+        
         fifo_transaction tr;
         tr = new();
 
