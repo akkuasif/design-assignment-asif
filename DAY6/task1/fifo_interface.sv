@@ -23,12 +23,12 @@ module fifo #(parameter DEPTH=8, DATA_WIDTH=8) (
             r_ptr <= 0;
             data_out <= 0;
         end else begin
-            // Write operation
+            
             if (wr_en && !full) begin
                 mem[w_ptr[2:0]] <= data_in;
                 w_ptr <= w_ptr + 1;
             end
-            // Read operation
+            
             if (rd_en && !empty) begin
                 data_out <= mem[r_ptr[2:0]];
                 r_ptr <= r_ptr + 1;
