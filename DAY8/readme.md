@@ -1,44 +1,197 @@
+<img width="1577" height="655" alt="image" src="https://github.com/user-attachments/assets/4de926e1-add4-46af-b1b7-ee8e9c3a7a80" /><img width="1577" height="655" alt="image" src="https://github.com/user-attachments/assets/b3e2f1ed-5165-4d5b-8095-352e625f2a9f" />
+# APB Protocol Design and Verification
 
-<img width="1613" height="801" alt="image" src="https://github.com/user-attachments/assets/015f3744-ac7e-498a-8081-d6e3f685c386" />
-# APB Protocol Layered Testbench
+## Overview
 
-This repository/project contains a SystemVerilog layered testbench designed to verify an Advanced Peripheral Bus (APB) design. The project is organized into standard verification components and is fully compatible with **EDA Playground**.
+This project implements an Advanced Peripheral Bus (APB) Design using Verilog and verifies its functionality using a layered SystemVerilog testbench. The verification environment follows a modular architecture consisting of Generator, Driver, Monitor, Scoreboard, Agent, Environment, and Test components.
 
-## 📁 File Structure & Overview
+The project demonstrates APB read and write transactions, protocol timing verification, and data integrity checking through a scoreboard-based verification approach.
 
-The testbench is modular and follows standard SystemVerilog verification architecture. Below is a breakdown of the files included in the `DAY7/APB/tb` directory:
+---
 
-### Design & Top-Level Files
-* **`design.sv`**: Contains the Register Transfer Level (RTL) code for the APB Design Under Test (DUT).
-* **`testbench.sv`**: The top-level testbench module. It instantiates the DUT, the physical interface, and generates the clock and reset signals. It acts as the entry point for EDA Playground.
+## Project Structure
 
-### Verification Environment Components
-* **`interface.sv`**: Defines the APB protocol signals, clocking blocks, and modports to connect the testbench components to the DUT.
-* **`transaction.sv`**: Defines the APB sequence item (packet). It contains the data fields (address, data, read/write control) and randomization constraints.
-* **`generator.sv`**: Generates randomized transaction objects and passes them to the driver via mailboxes.
-* **`driver.sv`**: Receives transactions from the generator and drives the pin-level signals onto the APB `interface`.
-* **`monitor.sv`**: Passively observes the `interface`, samples the APB bus activity, converts pin-level activity back into transaction objects, and sends them to the scoreboard.
-* **`scoreboard.sv`**: Receives sampled transactions from the monitor, computes the expected results, and compares them against the actual DUT output to verify correctness.
-* **`environment.sv`**: The container class that instantiates, builds, and connects the generator, driver, monitor, and scoreboard using mailboxes and virtual interfaces.
-* **`test.sv`**: The test case layer. It instantiates the `environment`, configures the test parameters, and initiates the stimulus generation.
+### Design Files
 
-## 🚀 Running on EDA Playground
+#### apb_master.sv
 
-Since this code is structured for EDA Playground, follow these steps to run the simulation:
+Implements the APB Master Finite State Machine (FSM).
 
-1.  **Testbench + Design**: 
-    * Place the contents of `testbench.sv` in the **Testbench** window.
-    * Place the contents of `design.sv` in the **Design** window.
-2.  **Include Directives**: Ensure your `testbench.sv` file correctly includes the class files in the proper compilation order (usually interface, transaction, generator, driver, monitor, scoreboard, environment, and then test). For example:
-    ```systemverilog
-    `include "interface.sv"
-    `include "transaction.sv"
-    `include "generator.sv"
-    `include "driver.sv"
-    `include "monitor.sv"
-    `include "scoreboard.sv"
-    `include "environment.sv"
-    `include "test.sv"
-    ```
-3.  **Simulator Selection**: Choose a simulator from the left-hand panel (e.g., Aldec Riviera Pro, Cadence Xcelium, Mentor Questa, or Synopsys VCS).
-4.  **Run**: Click the **Run** button to compile and execute the testbench.
+Features:
+
+* IDLE State
+* SETUP State
+* ACCESS State
+* APB Read Transfer
+* APB Write Transfer
+* Address and Data Generation
+
+#### apb_slave.sv
+
+Implements the APB Slave Peripheral.
+
+Features:
+
+* Internal Register Memory
+* Read Operation
+* Write Operation
+* PREADY Generation
+* PRDATA Generation
+
+---
+
+### Verification Files
+
+#### apb_if.sv
+
+SystemVerilog Interface used to connect the verification environment with the DUT.
+
+#### transaction.sv
+
+Defines APB transaction packets.
+
+Fields:
+
+* Address
+* Data
+* Read/Write Control
+
+#### generator.sv
+
+Generates randomized APB transactions and sends them to the driver through a mailbox.
+
+#### driver.sv
+
+Receives transactions from the generator and drives APB signals onto the DUT interface.
+
+#### monitor.sv
+
+Monitors APB bus activity and converts signal-level activity into transaction objects.
+
+#### scoreboard.sv
+
+Compares actual DUT outputs against expected values and reports PASS/FAIL results.
+
+#### agent.sv
+
+Container for:
+
+* Generator
+* Driver
+* Monitor
+
+#### env.sv
+
+Verification environment containing:
+
+* Agent
+* Scoreboard
+
+#### test.sv
+
+Creates and runs the verification environment.
+
+#### top.sv
+
+Top-level simulation module.
+
+Responsibilities:
+
+* Instantiates DUT
+* Instantiates Interface
+* Creates Verification Components
+* Generates Clock and Reset
+* Starts Simulation
+
+---
+
+## APB Protocol Verification Flow
+
+Generator
+→ Driver
+→ Interface
+→ DUT
+
+Monitor
+→ Scoreboard
+
+The verification environment checks:
+
+* APB Read Transfers
+* APB Write Transfers
+* Address Stability
+* Data Stability
+* PSEL and PENABLE Timing
+* Read Data Correctness
+* Protocol Compliance
+
+---
+
+## Simulation Procedure
+
+Compile Files:
+
+```tcl
+vlog apb_master.sv
+vlog apb_slave.sv
+
+vlog apb_if.sv
+vlog transaction.sv
+vlog generator.sv
+vlog driver.sv
+vlog monitor.sv
+vlog scoreboard.sv
+vlog agent.sv
+vlog env.sv
+vlog test.sv
+
+vlog top.sv
+```
+
+Run Simulation:
+
+```tcl
+vsim top
+add wave *
+run -all
+```
+
+---
+
+## Verification Results
+
+The following checks were performed:
+
+* Successful APB Write Transactions
+* Successful APB Read Transactions
+* Correct Read Data Matching Written Data
+* Proper FSM State Transitions
+* Correct APB SETUP and ACCESS Phases
+* Scoreboard-Based Data Verification
+
+All test cases passed successfully.
+
+---
+
+## Tools Used
+
+* Verilog
+* SystemVerilog
+* ModelSim / QuestaSim
+* EDA Playground
+
+---
+
+## Learning Outcomes
+
+Through this project, the following concepts were explored:
+
+* APB Protocol Architecture
+* FSM-Based Design
+* SystemVerilog Interfaces
+* Mailboxes
+* Generator-Driver Communication
+* Monitor and Scoreboard Methodology
+* Layered Verification Environment
+* Functional Verification Flow
+
