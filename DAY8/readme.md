@@ -1,4 +1,5 @@
-<img width="1577" height="655" alt="image" src="https://github.com/user-attachments/assets/4de926e1-add4-46af-b1b7-ee8e9c3a7a80" /
+<img width="1567" height="782" alt="image" src="https://github.com/user-attachments/assets/3deea372-17b8-4aae-a496-796e71294619" />
+
 # APB Protocol Design and Verification
 
 ## Overview
