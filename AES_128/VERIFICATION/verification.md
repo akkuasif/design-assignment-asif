@@ -1,4 +1,5 @@
-![Uploading image.png…]()
+<img width="1600" height="900" alt="image" src="https://github.com/user-attachments/assets/3020e7a6-d2b9-4483-982c-079805bf5a96" />
+
 # AES-128 Verification Documentation
 
 ## Project Title
