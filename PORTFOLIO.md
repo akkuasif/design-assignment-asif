@@ -145,7 +145,7 @@ Repository:
 
 ## 📫 Connect With Me
 
-📧 Email: [24BL16505@rit.ac.in](mailto:24BL16505@rit.ac.in)
+📧 Email: [24bl16505@rit.ac.in](mailto:24BL16505@rit.ac.in)
 
 💼 LinkedIn:
 https://www.linkedin.com/in/muhammed-asif-6b35aa31b
